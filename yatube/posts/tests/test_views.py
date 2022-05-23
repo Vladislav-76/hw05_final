@@ -66,6 +66,9 @@ class PostPagesTest(TestCase):
         self.user = PostPagesTest.post.author
         self.authorized_client_author = Client()
         self.authorized_client_author.force_login(self.user)
+        self.test_user = User.objects.get(username='TestCommentor')
+        self.authorized_client_test_user = Client()
+        self.authorized_client_test_user.force_login(self.test_user)
 
     def test_pages_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
@@ -185,16 +188,16 @@ class PostPagesTest(TestCase):
     def test_follow_create_correct(self):
         """Авторизованный пользователь может подписываться."""
         follows_count = Follow.objects.count()
-        self.authorized_client_author.get(
+        self.authorized_client_test_user.get(
             reverse('posts:profile_follow', kwargs={'username': 'TestName'}))
         self.assertEqual(Follow.objects.count(), follows_count + 1)
 
     def test_follow_delete_correct(self):
         """Авторизованный пользователь может удалять подписки."""
-        self.authorized_client_author.get(
+        self.authorized_client_test_user.get(
             reverse('posts:profile_follow', kwargs={'username': 'TestName'}))
         follows_count = Follow.objects.count()
-        self.authorized_client_author.get(
+        self.authorized_client_test_user.get(
             reverse('posts:profile_unfollow', kwargs={'username': 'TestName'}))
         self.assertEqual(Follow.objects.count(), follows_count - 1)
 
