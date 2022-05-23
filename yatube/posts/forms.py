@@ -20,11 +20,8 @@ class PostForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('text', 'post')
-        labels = {
-            'text': 'Текст комментария',
-            'post': 'Комментируемый пост'
-        }
+        fields = ('text',)
+        labels = {'text': 'Текст комментария'}
         help_texts = {'text': 'Заполните содержание комментария'}
 
     def clean_subject(self):
