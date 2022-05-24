@@ -55,6 +55,10 @@ class PostPagesTest(TestCase):
             text='Тестовый комментарий',
             post=Post.objects.get(pk=2128)
         )
+        cls.follow = Follow.objects.create(
+            user=User.objects.create_user(username='Follower'),
+            author=User.objects.create_user(username='Following'),
+        )
 
     @classmethod
     def tearDownClass(cls):
@@ -69,6 +73,9 @@ class PostPagesTest(TestCase):
         self.test_user = User.objects.get(username='TestCommentor')
         self.authorized_client_test_user = Client()
         self.authorized_client_test_user.force_login(self.test_user)
+        self.follower = User.objects.get(username='Follower')
+        self.authorized_client_follower = Client()
+        self.authorized_client_follower.force_login(self.follower)
 
     def test_pages_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
@@ -113,14 +120,14 @@ class PostPagesTest(TestCase):
             author=User.objects.get(username='TestName'),
             text='Тест кеша'
         )
-        response = self.client.get(reverse('posts:index'))
-        self.assertContains(response, 'Тест кеша')
+        response_before_delete = self.client.get(reverse('posts:index'))
+        self.assertContains(response_before_delete, 'Тест кеша')
         Post.objects.filter(text='Тест кеша').delete()
         response = self.client.get(reverse('posts:index'))
-        self.assertContains(response, 'Тест кеша')
+        self.assertContains(response, response_before_delete.content)
         cache.clear()
         response = self.client.get(reverse('posts:index'))
-        self.assertNotContains(response, 'Тест кеша')
+        self.assertNotContains(response, response_before_delete.content)
 
     def test_group_correct_context(self):
         """Шаблон group_list сформирован с правильным контекстом."""
@@ -194,19 +201,14 @@ class PostPagesTest(TestCase):
 
     def test_follow_delete_correct(self):
         """Авторизованный пользователь может удалять подписки."""
-        self.authorized_client_test_user.get(
-            reverse('posts:profile_follow', kwargs={'username': 'TestName'}))
         follows_count = Follow.objects.count()
-        self.authorized_client_test_user.get(
-            reverse('posts:profile_unfollow', kwargs={'username': 'TestName'}))
+        self.authorized_client_follower.get(
+            reverse('posts:profile_unfollow',
+                    kwargs={'username': 'Following'}))
         self.assertEqual(Follow.objects.count(), follows_count - 1)
 
     def test_post_appear_followers(self):
         """Новый пост появляется только у подписчиков."""
-        Follow.objects.create(
-            user=User.objects.create_user(username='Follower'),
-            author=User.objects.create_user(username='Following'),
-        )
         Post.objects.create(
             author=User.objects.get(username='Following'),
             text='Тестовый текст ленты',
