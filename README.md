@@ -1,3 +1,60 @@
-# hw05_final
+# **Yatube** – социальная сеть для публикации дневников
 
-[![CI](https://github.com/yandex-praktikum/hw05_final/actions/workflows/python-app.yml/badge.svg?branch=master)](https://github.com/yandex-praktikum/hw05_final/actions/workflows/python-app.yml)
+Разработана социальная сеть для публикации личных дневников. Это сайт, на котором можно создать свою страницу. Если на нее зайти, можно посмотреть все записи автора.
+Пользователи могут заходить на чужие страницы, подписываться на авторов и комментировать их записи.
+Модерация записей через интерфейс администратора.
+
+Использована архитектура MVT. Используется пагинация постов и кэширование. Регистрация пользователей с верификацией данных, сменой и восстановлением пароля через почту.
+
+### Стек:
+Python 3.7, Django 2.2, Django ORM, HTML, Unittest
+
+### Как запустить проект:
+
+Клонировать репозиторий и перейти в него в командной строке:
+
+```
+https://github.com/Vladislav-76/api_yamdb.git
+```
+
+```
+cd api_api_yamdb
+```
+
+Cоздать и активировать виртуальное окружение:
+
+```
+python3 -m venv venv
+```
+
+```
+source venv/bin/activate
+```
+
+Установить зависимости из файла requirements.txt:
+
+```
+python3 -m pip install --upgrade pip
+```
+
+```
+pip install -r requirements.txt
+```
+
+Перейти в корневую папку проекта:
+
+```
+cd api_yamdb
+```
+
+Выполнить миграции:
+
+```
+python3 manage.py migrate
+```
+
+Запустить проект:
+
+```
+python3 manage.py runserver
+```
