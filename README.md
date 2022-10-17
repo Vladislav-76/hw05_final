@@ -14,11 +14,11 @@ Python 3.7, Django 2.2, Django ORM, HTML, Unittest
 Клонировать репозиторий и перейти в него в командной строке:
 
 ```
-https://github.com/Vladislav-76/api_yamdb.git
+https://github.com/Vladislav-76/hw05_final
 ```
 
 ```
-cd api_api_yamdb
+cd hw05_final
 ```
 
 Cоздать и активировать виртуальное окружение:
@@ -44,7 +44,7 @@ pip install -r requirements.txt
 Перейти в корневую папку проекта:
 
 ```
-cd api_yamdb
+cd hw05_final
 ```
 
 Выполнить миграции:
